@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+gem 'hydra', github: 'projecthydra/hydra', branch: 'pcdm'
+
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.4'
