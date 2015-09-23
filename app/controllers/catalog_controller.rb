@@ -4,15 +4,17 @@ require 'blacklight/catalog'
 class CatalogController < ApplicationController
 
   include Hydra::Catalog
-  # These before_filters apply the hydra access controls
-  before_filter :enforce_show_permissions, :only=>:show
-  # This applies appropriate access controls to all solr queries
-  CatalogController.search_params_logic += [:add_access_controls_to_solr_params]
+  # # These before_filters apply the hydra access controls
+  # before_filter :enforce_show_permissions, :only=>:show
+  # # This applies appropriate access controls to all solr queries
+  # CatalogController.search_params_logic += [:add_access_controls_to_solr_params]
 
 
   configure_blacklight do |config|
     config.search_builder_class = Hydra::SearchBuilder
     config.default_solr_params = {
+      :qf => 'title_tesim author_tesim abstract_tesim',
+      :fq => '-has_model_ssim:"ActiveFedora::IndirectContainer"-has_model_ssim:"ActiveFedora::Aggregation::Proxy"',
       :qt => 'search',
       :rows => 10
     }
@@ -85,6 +87,7 @@ class CatalogController < ApplicationController
     config.add_show_field solr_name('published_vern', :stored_searchable, type: :string), :label => 'Published:'
     config.add_show_field solr_name('lc_callnum', :stored_searchable, type: :string), :label => 'Call number:'
     config.add_show_field solr_name('isbn', :stored_searchable, type: :string), :label => 'ISBN:'
+    config.add_show_field solr_name('abstract', :stored_searchable, type: :string), :label => 'Abstract:'
 
     # "fielded" search configuration. Used by pulldown among other places.
     # For supported keys in hash, see rdoc for Blacklight::SearchFields
